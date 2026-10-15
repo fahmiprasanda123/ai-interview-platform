@@ -30,6 +30,9 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 - Tenant scoping for `/portfolios/*` and `/portfolio_skills/*/override`. Overrides need
   a reason and are refused on unrated skills. `enqueue_once` dedupes fit/gap jobs.
 - PDF: Windows-1252-safe text. Unrated skills and override reasons are printed.
+- `Gemini::HttpClient` can use the Interactions API (`GEMINI_HTTP_API=interactions`).
+  This is needed for AI Studio auth keys (`AQ.`), which get 404 on `generateContent`.
+  Gemini error bodies are no longer logged.
 
 **Migrations** (reversible, safe on existing rows)
 - `portfolio_skills.ai_level` becomes nullable. Adds `rating_status` (with check
@@ -56,7 +59,7 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 - The header fits at 375 px.
 
 **Tooling**
-- RSpec harness: 65 examples, with factories and a fake Gemini client.
+- RSpec harness: 71 examples, with factories and a fake Gemini client.
 - Vitest + Testing Library: 25 tests.
 - GitHub Actions: builds the DB from migrations, checks rollback and schema drift,
   then runs RSpec, typecheck, Vitest and the build.

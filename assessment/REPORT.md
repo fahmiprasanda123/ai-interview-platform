@@ -28,7 +28,7 @@ into *a low score*:
 The change makes every rating either backed by verified quotes, or explicitly
 **not assessed** and excluded from the gap count. Assessors see why, can link
 each quote to the transcript turn, and must give a reason when they change a
-rating. The fixes cover both services and are tested in both (65 RSpec examples,
+rating. The fixes cover both services and are tested in both (71 RSpec examples,
 25 Vitest tests, CI on every PR).
 
 ---
@@ -180,6 +180,10 @@ with `…` are allowed if they come from the same turn.
 - Tenant scoping for portfolio and override endpoints; overrides need a reason
   and are refused on unrated skills; `enqueue_once` lock for fit/gap jobs
 - PDF: Windows-1252-safe text, unrated skills and override reasons printed
+- `Gemini::HttpClient`: optional Interactions API (`GEMINI_HTTP_API=interactions`).
+  New AI Studio keys are auth keys (`AQ.`) that pass Gemini Live but get 404 on
+  every `generateContent` call, so portfolios could not be generated at all with a
+  fresh key. Error bodies (which can echo the transcript) are no longer logged
 
 **Web**
 - Portfolio page: honest unrated state (no badge, reason, "not counted", no
@@ -195,7 +199,7 @@ with `…` are allowed if they come from the same turn.
 
 ### Test harness (there was none)
 - **RSpec**: `rails_helper`, tenant helpers, factories with fictional data, a
-  `FakeGeminiClient`; 65 examples across generator, matcher, engine, PDF and
+  `FakeGeminiClient`; 71 examples across generator, matcher, engine, PDF and
   request specs (tenant isolation, override rules, job dedupe, staleness)
 - **Vitest + Testing Library**: 25 tests for `parseLevel`, `ComparisonTable`,
   `SkillPortfolioCard`/override flow, `useFitGapReport` (fake timers)
@@ -255,9 +259,13 @@ generating, fallback), phone layouts at 375 px, failed and load-error states.
 ## Assumptions
 
 - Ran the post-interview flow with `db/seeds/demo_interview.rb` (fictional data,
-  real generator and engine, canned model answers) because the live audio
-  flow needs a Gemini Live key and microphone. *Re-run the full live flow with
-  your own key before the video.*
+  real generator and engine, canned model answers), then regenerated the same
+  portfolio against real Gemini (`gemini-3.8-flash` via Interactions, 19 s): same
+  ratings, the override survived, the unreached skill stayed not assessed. A
+  Gemini Live WebSocket setup with the same key succeeded. *Run one full spoken
+  interview before recording the video.*
+- Pro-tier models have zero free quota on the test key, so both the "Pro" and
+  "Flash" roles used `gemini-3.8-flash` locally.
 - "Discovered" skills without verifiable evidence are dropped rather than shown
   as insufficient evidence: nobody configured them, so they'd only add noise.
 - Override on an unrated skill is refused. The assessor's real action there is a
