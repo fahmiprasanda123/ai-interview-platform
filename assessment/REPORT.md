@@ -3,9 +3,8 @@
 Branch: `feat/trustworthy-skill-ratings` · Seeded-fault proof: [`scratch/seeded-fault`](https://github.com/fahmiprasanda123/ai-interview-platform/commits/scratch/seeded-fault)
 Acceptance criteria: [`acceptance-criteria.md`](acceptance-criteria.md) · Evidence: [`evidence/`](evidence) · Screenshots: [`screenshots/`](screenshots)
 
-> **Draft.** Before submitting: add the PR link and the video link, check the
-> assumptions below against what you saw when you ran the product, and rewrite
-> anything in your own words.
+Pull request: https://github.com/rakamindev/ai-interview-platform/pull/155 ·
+Video: https://drive.google.com/drive/folders/1L_vHt_9VZ-nhaaepZzfeaAsAJKBQ8npU?usp=sharing
 
 ---
 
@@ -28,7 +27,7 @@ into *a low score*:
 The change makes every rating either backed by verified quotes, or explicitly
 **not assessed** and excluded from the gap count. Assessors see why, can link
 each quote to the transcript turn, and must give a reason when they change a
-rating. The fixes cover both services and are tested in both (71 RSpec examples,
+rating. The fixes cover both services and are tested in both (72 RSpec examples,
 25 Vitest tests, CI on every PR).
 
 ---
@@ -99,6 +98,7 @@ app, the JSON and the PDF.
 | **P2** | D | Generator saves skills without a transaction; no guard against duplicate jobs | Partial portfolios; duplicate model calls |
 | **P2** | D | `generation_error` stores raw exception text | Can echo model output, i.e. transcript content (UU PDP) |
 | **P2** | D | `GET /portfolio` returns an empty portfolio while still `pending` | UI briefly shows "no skills" |
+| **P2** | D | `Portfolio` has no `fit_gap_reports` association, so deleting it hits the foreign key | A portfolio or session with a fit/gap report can't be deleted (e.g. for a UU PDP deletion request) |
 | **P3** | D | `LevelRadio` uses fixed ids, so labels on multi-skill pages control the first group | Clicking L4 on skill 3 changes skill 1 (also on vacancy and assessment forms) |
 | **P3** | D | Assessor pages scroll sideways at 375 px (header ~550 px wide) | Unusable on phones |
 | **P3** | D | Emoji result badges, "You Overridden ✓" copy | Reads as unfinished |
@@ -202,7 +202,7 @@ with `…` are allowed if they come from the same turn.
 
 ### Test harness (there was none)
 - **RSpec**: `rails_helper`, tenant helpers, factories with fictional data, a
-  `FakeGeminiClient`; 71 examples across generator, matcher, engine, PDF and
+  `FakeGeminiClient`; 72 examples across generator, matcher, engine, PDF and
   request specs (tenant isolation, override rules, job dedupe, staleness)
 - **Vitest + Testing Library**: 25 tests for `parseLevel`, `ComparisonTable`,
   `SkillPortfolioCard`/override flow, `useFitGapReport` (fake timers)

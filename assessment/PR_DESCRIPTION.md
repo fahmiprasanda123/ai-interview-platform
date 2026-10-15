@@ -61,7 +61,7 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 - The header fits at 375 px.
 
 **Tooling**
-- RSpec harness: 71 examples, with factories and a fake Gemini client.
+- RSpec harness: 72 examples, with factories and a fake Gemini client.
 - Vitest + Testing Library: 25 tests.
 - GitHub Actions: builds the DB from migrations, checks rollback and schema drift,
   then runs RSpec (eager-loaded), typecheck, Vitest and the build. The workflow holds
