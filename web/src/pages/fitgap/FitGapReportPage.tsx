@@ -175,7 +175,9 @@ export default function FitGapReportPage() {
                   <p className="whitespace-pre-wrap break-words text-sm leading-relaxed">{report.overall_narrative}</p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                  Written by AI from the comparison above. Base decisions on the levels and evidence, not this text alone.
+                  {report.culture_narrative
+                    ? "Written by AI from the comparison above. Base decisions on the levels and evidence, not this text alone."
+                    : "The AI summary was unavailable, so this was counted from the table above. Regenerate to try again."}
                 </p>
               </CardContent>
             </Card>

@@ -176,11 +176,20 @@ module FitGap
 
     def generate_fallback_narrative(comparisons)
       counts = comparisons.group_by { |c| c[:result] }.transform_values(&:count)
-      text = "Automatic summary (the AI narrative was unavailable): #{counts.fetch('match', 0)} skill matches, " \
-             "#{counts.fetch('exceed', 0)} exceeds and #{counts.fetch('gap', 0)} gaps against role requirements."
+      text = "Automatic summary (the AI narrative was unavailable): " \
+             "#{pluralize(counts.fetch('match', 0), 'skill match', 'skill matches')}, " \
+             "#{pluralize(counts.fetch('exceed', 0), 'exceed')} and " \
+             "#{pluralize(counts.fetch('gap', 0), 'gap')} against role requirements."
       not_assessed = counts.fetch('not_assessed', 0)
-      text += " #{not_assessed} required skills were not assessed in this interview and are not counted." if not_assessed.positive?
+      if not_assessed.positive?
+        text += " #{pluralize(not_assessed, 'required skill was', 'required skills were')} " \
+                'not assessed in this interview and not counted.'
+      end
       text
+    end
+
+    def pluralize(count, singular, plural = "#{singular}s")
+      "#{count} #{count == 1 ? singular : plural}"
     end
   end
 end

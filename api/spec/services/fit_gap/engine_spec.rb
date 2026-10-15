@@ -102,7 +102,8 @@ RSpec.describe FitGap::Engine do
       expect(report).to be_persisted
       expect(report.culture_narrative).to be_nil
       expect(report.overall_narrative).to start_with('Automatic summary')
-      expect(report.overall_narrative).to include('1 required skills were not assessed')
+      expect(report.overall_narrative).to include('1 skill match, 0 exceeds and 0 gaps')
+      expect(report.overall_narrative).to include('1 required skill was not assessed')
     end
 
     it 'falls back when the model answers with the wrong shape' do
