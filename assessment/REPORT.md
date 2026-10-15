@@ -4,7 +4,7 @@ Branch: `feat/trustworthy-skill-ratings` · Seeded-fault proof: [`scratch/seeded
 Acceptance criteria: [`acceptance-criteria.md`](acceptance-criteria.md) · Evidence: [`evidence/`](evidence) · Screenshots: [`screenshots/`](screenshots)
 
 Pull request: https://github.com/rakamindev/ai-interview-platform/pull/155 ·
-Video: https://drive.google.com/drive/folders/1L_vHt_9VZ-nhaaepZzfeaAsAJKBQ8npU?usp=sharing
+Video: https://drive.google.com/file/d/1QADhrV3B2xdXttWiO0PhWcjl6oE8p_WN/view?usp=sharing
 
 ---
 
