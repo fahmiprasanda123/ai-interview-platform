@@ -87,6 +87,7 @@ app, the JSON and the PDF.
 |---|---|---|---|
 | **P0** | D | Skills never reached in the interview are saved as L1 (`nil.to_i.clamp(1,5)`), and the model is asked to rate them anyway | The candidate gets a "gap" on a skill nobody asked about; the assessor sees a confident L1 |
 | **P0** | D | `Portfolio.find` / `PortfolioSkill.find` are not tenant-scoped | An assessor at company A can export or **override** company B's candidate ratings by id (proved: 201 on a cross-tenant override, 200 on cross-tenant export) |
+| **P1** | D | `audio_websocket_middleware.rb` defines `AudioWebSocketMiddleware`, so Zeitwerk eager loading raises `NameError` (`rails zeitwerk:check` fails on `main`) | Production uses `eager_load = true`, so the API can't boot there; found when CI ran tests with eager loading |
 | **P1** | M | Evidence quotes are never checked against the transcript | Hallucinated quotes look exactly like real ones and justify a level |
 | **P1** | D | Confidence is taken from the model, although PRD 01 defines it from probe count and coverage | A skill probed once can show "high confidence" |
 | **P1** | D | Fit/gap table reads `required_level`, API sends `expected_level` | The "Required" column is always blank, so the gap can't be checked at a glance |
@@ -180,6 +181,8 @@ with `…` are allowed if they come from the same turn.
 - Tenant scoping for portfolio and override endpoints; overrides need a reason
   and are refused on unrated skills; `enqueue_once` lock for fit/gap jobs
 - PDF: Windows-1252-safe text, unrated skills and override reasons printed
+- Zeitwerk inflections for the two websocket middlewares, so eager loading
+  (production, CI) boots
 - `Gemini::HttpClient`: optional Interactions API (`GEMINI_HTTP_API=interactions`).
   New AI Studio keys are auth keys (`AQ.`) that pass Gemini Live but get 404 on
   every `generateContent` call, so portfolios could not be generated at all with a
@@ -205,7 +208,11 @@ with `…` are allowed if they come from the same turn.
   `SkillPortfolioCard`/override flow, `useFitGapReport` (fake timers)
 - **CI** (`.github/workflows/ci.yml`): builds the DB from migrations, rolls the
   new ones back and re-applies them, fails on `schema.rb` drift, runs RSpec;
-  web runs typecheck, tests and build
+  web runs typecheck, tests and build. RSpec runs with `CI=true`,
+  so the whole app is eager-loaded. The workflow holds no credentials: the
+  throwaway Postgres container uses `trust` auth, and the test-only secrets come
+  from `rails_helper`. The first version set `POSTGRES_PASSWORD: postgres`, which
+  the repo's GitGuardian check flagged, so that commit was rewritten.
 
 ### Proven correctness: watched it fail
 1. **Against the original code** (`evidence/baseline-rspec-against-main.txt`):
@@ -243,7 +250,12 @@ are the places where its output was wrong or risky, and how they were caught:
    "Written by AI" when the AI call had failed and the text was counted from the
    table, and it told the assessor to "regenerate" on a page with no regenerate
    button. Both fixed after clicking through the real flow.
-5. **Test tooling surprise.** A Vitest test for the override error failed even
+5. **A CI run that only passed on my machine.** My first local CI simulation
+   passed because it picked up my `config/application.yml`. Re-running it in a
+   clean worktree with only the CI environment showed two real failures:
+   `ALLOWED_ORIGINS` is required at boot, and eager loading crashed on the
+   websocket middleware names (a bug already on `main`). Both are fixed.
+6. **Test tooling surprise.** A Vitest test for the override error failed even
    though the UI showed the right message. Logging showed the component did catch
    the error. The failure came from `vi.fn()` in Vitest 3.2 reporting the rejected
    promise. Plain stubs are used for those cases, with a comment explaining why.

@@ -30,6 +30,8 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 - Tenant scoping for `/portfolios/*` and `/portfolio_skills/*/override`. Overrides need
   a reason and are refused on unrated skills. `enqueue_once` dedupes fit/gap jobs.
 - PDF: Windows-1252-safe text. Unrated skills and override reasons are printed.
+- Zeitwerk inflections for `AudioWebSocketMiddleware` and `CoverageWebSocketMiddleware`.
+  Eager loading (production, CI) raised `NameError`, and `rails zeitwerk:check` fails on `main`.
 - `Gemini::HttpClient` can use the Interactions API (`GEMINI_HTTP_API=interactions`).
   This is needed for AI Studio auth keys (`AQ.`), which get 404 on `generateContent`.
   Gemini error bodies are no longer logged.
@@ -62,7 +64,8 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 - RSpec harness: 71 examples, with factories and a fake Gemini client.
 - Vitest + Testing Library: 25 tests.
 - GitHub Actions: builds the DB from migrations, checks rollback and schema drift,
-  then runs RSpec, typecheck, Vitest and the build.
+  then runs RSpec (eager-loaded), typecheck, Vitest and the build. The workflow holds
+  no credentials: the throwaway Postgres container uses `trust` auth.
 
 ## How it was verified
 
