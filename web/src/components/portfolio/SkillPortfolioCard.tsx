@@ -41,7 +41,8 @@ export default function SkillPortfolioCard({ skill, override, transcriptPath, on
             </div>
           )}
 
-          <div className="min-w-0 flex-1 space-y-1">
+          {/* min width makes the action button wrap onto its own row on phones */}
+          <div className="min-w-[12rem] flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <h3 id={headingId} className="break-words font-semibold">
                 {skill.skill_label}
@@ -67,7 +68,7 @@ export default function SkillPortfolioCard({ skill, override, transcriptPath, on
           </div>
 
           {rated && !editing && (
-            <Button variant="outline" size="sm" onClick={() => setEditing(true)} className="shrink-0">
+            <Button variant="outline" size="sm" onClick={() => setEditing(true)} className="w-full shrink-0 sm:w-auto">
               {override ? (
                 <>
                   <Pencil aria-hidden className="mr-1 h-3 w-3" /> Edit override
