@@ -67,7 +67,7 @@ outcome. Before this PR the system turned *missing evidence* into *a low score*:
 ## How it was verified
 
 - The same specs run against `main` fail 48 of 57 (`assessment/evidence/baseline-rspec-against-main.txt`).
-- **Seeded fault**: branch `scratch/seeded-fault` re-introduces the L1 fallback in
+- **Seeded fault**: branch [`scratch/seeded-fault`](https://github.com/fahmiprasanda123/ai-interview-platform/commits/scratch/seeded-fault) re-introduces the L1 fallback in
   both services. 6 RSpec and 5 Vitest failures, then a revert commit makes both
   suites green again (`assessment/evidence/seeded-fault-*.txt`).
 - Clicked through with `api/db/seeds/demo_interview.rb` (fictional data, real

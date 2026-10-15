@@ -1,6 +1,6 @@
 # Trustworthy skill ratings: case study report
 
-Branch: `feat/trustworthy-skill-ratings` · Seeded-fault proof: `scratch/seeded-fault`
+Branch: `feat/trustworthy-skill-ratings` · Seeded-fault proof: [`scratch/seeded-fault`](https://github.com/fahmiprasanda123/ai-interview-platform/commits/scratch/seeded-fault)
 Acceptance criteria: [`acceptance-criteria.md`](acceptance-criteria.md) · Evidence: [`evidence/`](evidence) · Screenshots: [`screenshots/`](screenshots)
 
 > **Draft.** Before submitting: add the PR link and the video link, check the
@@ -214,7 +214,7 @@ with `…` are allowed if they come from the same turn.
    - cross-tenant override: expected 404, **got 201**
    - cross-tenant export: expected 404, **got 200**
    - `evidence/baseline-pdf-override-crash.txt`: `Prawn::Errors::IncompatibleStringEncoding`
-2. **Seeded fault** (branch `scratch/seeded-fault`, history visible):
+2. **Seeded fault** ([`scratch/seeded-fault`](https://github.com/fahmiprasanda123/ai-interview-platform/commits/scratch/seeded-fault), history visible):
    commit `test: seeded fault - unknown levels fall back to L1 again` puts the
    clamp back in the generator and the L1 fallback in `parseLevel`. RSpec:
    6 failures; Vitest: 5 failures (`evidence/seeded-fault-*.txt`). The next
