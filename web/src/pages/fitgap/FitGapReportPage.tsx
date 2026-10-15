@@ -77,6 +77,9 @@ export default function FitGapReportPage() {
 
         {report && (
           <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={regenerate}>
+              <RefreshCw className="mr-1 h-3.5 w-3.5" /> Regenerate
+            </Button>
             <Button variant="outline" size="sm" onClick={() => handleExport("pdf")} disabled={!!exporting}>
               {exporting === "pdf" ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Download className="mr-1 h-3.5 w-3.5" />}
               PDF
