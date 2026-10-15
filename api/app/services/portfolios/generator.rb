@@ -146,9 +146,7 @@ module Portfolios
                                              .uniq { |e| e[:quote] }
                                              .first(MAX_EVIDENCE)
 
-      # SEEDED FAULT: bring back the old clamp so a missing level becomes L1.
-      level ||= proposal['level'].to_i.clamp(1, 5)
-      return unrated('insufficient_evidence', INSUFFICIENT_SUMMARY) if evidence.empty?
+      return unrated('insufficient_evidence', INSUFFICIENT_SUMMARY) if level.nil? || evidence.empty?
 
       summary = proposal['competency_summary'].to_s.strip
       summary = 'No summary was provided.' if summary.empty?

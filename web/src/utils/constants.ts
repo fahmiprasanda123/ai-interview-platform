@@ -7,8 +7,7 @@ export const TIME_LIMIT_OPTIONS = [10, 30, 45, 60, 90] as const;
 export function parseLevel(level: string | number | null | undefined): number | null {
   if (level == null) return null;
   const n = typeof level === "number" ? level : Number(String(level).trim().replace(/^L/i, ""));
-  // SEEDED FAULT: fall back to L1 like the original code did.
-  return Number.isInteger(n) && n >= 1 && n <= 5 ? n : 1;
+  return Number.isInteger(n) && n >= 1 && n <= 5 ? n : null;
 }
 
 export const LEVEL_LABELS: Record<number, string> = {
